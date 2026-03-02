@@ -12,11 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Pull OpenClaw image
-        run: docker pull pspdfkit/openclaw:latest
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Pull OpenClaw image (mirror)
+        run: docker pull dockerproxy.com/pspdfkit/openclaw:latest
 
       - name: Save image to tar file
-        run: docker save pspdfkit/openclaw:latest -o openclaw.tar
+        run: docker save dockerproxy.com/pspdfkit/openclaw:latest -o openclaw.tar
 
       - name: Compress the image
         run: gzip openclaw.tar
