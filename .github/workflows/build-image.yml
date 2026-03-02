@@ -1,0 +1,28 @@
+name: Build and Export OpenClaw Image
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Pull OpenClaw image
+        run: docker pull pspdfkit/openclaw:latest
+
+      - name: Save image to tar file
+        run: docker save pspdfkit/openclaw:latest -o openclaw.tar
+
+      - name: Compress the image
+        run: gzip openclaw.tar
+
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openclaw-docker-image
+          path: openclaw.tar.gz
